@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stardust</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" class="logo" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5C11.4 17.6 9.4 13.6 1.5 12 9.4 10.4 11.4 6.4 12 1.5Z"/></svg>
+      <span>stardust</span>
+    </div>
+    <button class="icon-btn" id="openSettings" title="Settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+    </button>
+  </header>
+
+  <!-- ===== main view ===== -->
+  <main id="mainView">
+    <section class="site card" id="siteCard">
+      <img id="favicon" alt="" width="20" height="20">
+      <div class="site-text">
+        <div class="host" id="host">…</div>
+        <div class="sub" id="siteSub"></div>
+      </div>
+      <label class="switch" title="Show or hide your style on this site"><input type="checkbox" id="enabled"><span></span></label>
+    </section>
+
+    <div class="tools" id="tools">
+      <button id="undo" title="Go back one version">↶ Undo</button>
+      <button id="redo" title="Go forward one version">↷ Redo</button>
+      <button id="editCss">{ } CSS</button>
+      <button id="startOver" class="danger">Start over</button>
+    </div>
+
+    <section class="css-editor card" id="cssEditor" hidden>
+      <div class="css-head">
+        <span>Stylesheet for this site</span>
+        <button class="link" id="copyCss">Copy</button>
+      </div>
+      <textarea id="css" spellcheck="false"></textarea>
+      <p class="hint">Edits apply live and are saved to the current version.</p>
+    </section>
+
+    <section class="thread" id="thread" aria-live="polite"></section>
+
+    <section class="empty" id="empty">
+      <div class="orb" aria-hidden="true">✦</div>
+      <h1>How should this site look?</h1>
+      <p>Describe a vibe, a colour, a tweak — anything. Stardust reads the page and restyles it live.</p>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <section class="unsupported card" id="unsupported" hidden>
+      Chrome doesn't let extensions restyle this page (browser pages, the new tab page and the Web Store). Open any website and Stardust will be ready.
+    </section>
+  </main>
+
+  <form class="composer" id="composer">
+    <div class="status" id="status" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <span id="statusText">Designing…</span>
+      <button type="button" class="link" id="stop">Stop</button>
+    </div>
+    <div class="input-wrap">
+      <textarea id="prompt" rows="1" placeholder="Make it feel like a cozy coffee shop…" aria-label="Describe how the site should look"></textarea>
+      <button type="submit" class="send" id="send" aria-label="Restyle">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.6 4.9 2.6 8.9 10.5 10.5-7.9 1.6-9.9 5.6-10.5 10.5C11.4 17.6 9.4 13.6 1.5 12 9.4 10.4 11.4 6.4 12 1.5Z"/></svg>
+      </button>
+    </div>
+    <div class="foot-hint">Enter to send · Shift+Enter for a new line</div>
+  </form>
+
+  <!-- ===== settings / setup view ===== -->
+  <section class="settings" id="settingsView" hidden>
+    <div class="settings-inner">
+      <div class="orb small" aria-hidden="true">✦</div>
+      <h1 id="settingsTitle">Connect Claude</h1>
+      <p class="lead" id="settingsLead">Stardust uses Claude to write the styles. Paste an API key from the Claude Console. It's stored only in this browser.</p>
+
+      <label class="field">
+        <span>Claude API key</span>
+        <input type="password" id="apiKey" placeholder="sk-ant-…" autocomplete="off" spellcheck="false">
+      </label>
+      <a class="small-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Get a key at console.anthropic.com ↗</a>
+
+      <label class="field">
+        <span>Model</span>
+        <select id="model">
+          <option value="claude-sonnet-5-5">Sonnet 5.5 — fast and great (recommended)</option>
+          <option value="claude-haiku-5-5">Haiku 5.5 — fastest and cheapest</option>
+          <option value="claude-opus-5-5">Opus 5.5 — most careful</option>
+        </select>
+      </label>
+
+      <details class="adv">
+        <summary>Advanced</summary>
+        <label class="field">
+          <span>API endpoint</span>
+          <input type="url" id="apiUrl" placeholder="https://api.anthropic.com/v1/messages" spellcheck="false">
+        </label>
+        <p class="hint">Only change this if you run your own proxy server.</p>
+      </details>
+
+      <p class="err" id="settingsErr" hidden></p>
+      <div class="settings-actions">
+        <button class="primary" id="saveSettings">Save</button>
+        <button class="ghost" id="closeSettings">Back</button>
+      </div>
+      <button class="link danger-link" id="clearAll">Erase all saved site styles</button>
+    </div>
+  </section>
+
+  <script src="panel.js"></script>
+</body>
+</html>
